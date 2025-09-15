@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://ckm4vkp5a4lve"]
+
+[ext_resource type="Script" uid="uid://c3beecwi3lo3c" path="res://Player.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://ti2b8as0d57c" path="res://Cubone.glb" id="3_kne1u"]
+
+[sub_resource type="SphereShape3D" id="1"]
+radius = 0.792278
+
+[sub_resource type="CylinderShape3D" id="2"]
+height = 0.1438
+radius = 0.907607
+
+[sub_resource type="Animation" id="3"]
+length = 1.2
+loop_mode = 1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kpjcp"]
+_data = {
+&"float": SubResource("3")
+}
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.33058, 0)
+collision_mask = 2147483650
+script = ExtResource("1")
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Character" parent="Pivot" instance=ExtResource("3_kne1u")]
+transform = Transform3D(4.33723, 0, 0, 0, 4.07061, 0, 0, 0, 5.03075, 0.396755, 1.54937, -0.497947)
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.398226, 0)
+shape = SubResource("1")
+
+[node name="MobDetector" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape3D" parent="MobDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06491, 0)
+shape = SubResource("2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_kpjcp")
+}
+autoplay = "float"
+
+[connection signal="body_entered" from="MobDetector" to="." method="_on_MobDetector_body_entered"]
